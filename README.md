@@ -6,3 +6,5 @@ A character builder for the joke system [Dungeons the Dragoning](https://dtd.wik
 [Trello](https://trello.com/b/bYBLUkyA/character-the-creationing)
 ---
 
+Credits: 
+Authentication tutorial using Spring Boot, PostgreSQL, and JWT tokens: https://www.bezkoder.com/spring-boot-security-postgresql-jwt-authentication/
