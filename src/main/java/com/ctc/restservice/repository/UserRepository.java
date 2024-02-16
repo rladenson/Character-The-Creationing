@@ -9,4 +9,6 @@ import com.ctc.restservice.models.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	// if this was a list: List<User> findByUsername(String username);
 	Optional<User> findByUsername(String username);
+	
+	Boolean existsByUsername(String username);
 }
