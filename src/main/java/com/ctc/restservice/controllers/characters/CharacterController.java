@@ -1,5 +1,7 @@
 package com.ctc.restservice.controllers.characters;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -30,8 +32,7 @@ public class CharacterController {
 	public ResponseEntity<?> newCharacter(Authentication authentication, @Valid @RequestBody NewCharacterRequest newCharacterRequest) {
 		String userName = authentication.getName();
 		User user = userRepository.findByUsername(userName).get();
-		
-		Character character = new Character(user, newCharacterRequest.getName());
+		Character character = new Character(user, newCharacterRequest);
 		
 		characterRepository.save(character);
 		
