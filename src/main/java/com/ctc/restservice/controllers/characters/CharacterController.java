@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ctc.restservice.controllers.MessageResponse;
 import com.ctc.restservice.models.Character;
+import com.ctc.restservice.models.ComprehensiveCharacter;
 import com.ctc.restservice.models.User;
 import com.ctc.restservice.repository.CharacterRepository;
+import com.ctc.restservice.repository.ComprehensiveCharacterRepository;
 import com.ctc.restservice.repository.UserRepository;
 
 import jakarta.validation.Valid;
@@ -32,6 +34,8 @@ public class CharacterController {
 	UserRepository userRepository;
 	@Autowired
 	CharacterRepository characterRepository;
+	@Autowired
+	ComprehensiveCharacterRepository ccRepository;
 	
 	@PostMapping("/new")
 	public ResponseEntity<?> newCharacter(Authentication authentication, @Valid @RequestBody NewCharacterRequest newCharacterRequest) {
@@ -55,12 +59,12 @@ public class CharacterController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getCharacter(@PathVariable Long id) {
-		Optional<Character> characterMaybe = characterRepository.findById(id);
+		Optional<ComprehensiveCharacter> characterMaybe = ccRepository.findById(id);
 		if(characterMaybe.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		Character character = characterMaybe.get();
-		return ResponseEntity.ok().body(new CharacterResponse(character, character.getUser().getId()));
+		ComprehensiveCharacter character = characterMaybe.get();
+		return ResponseEntity.ok().body(new FullCharacterResponse(character));
 	}
 	
 	@DeleteMapping("/{id}")
