@@ -4,9 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,10 +55,29 @@ public class CharacterController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getCharacter(@PathVariable Long id) {
-		Optional<Character> character = characterRepository.findById(id);
-		if(character.isEmpty()) {
+		Optional<Character> characterMaybe = characterRepository.findById(id);
+		if(characterMaybe.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		return ResponseEntity.ok().body(character.get());
+		Character character = characterMaybe.get();
+		return ResponseEntity.ok().body(new CharacterResponse(character, character.getUser().getId()));
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteCharacter(Authentication authentication, @PathVariable Long id) {
+		Optional<Character> characterMaybe = characterRepository.findById(id);
+		if(characterMaybe.isEmpty()) {
+			return ResponseEntity.notFound().build();
+		}
+		Character character = characterMaybe.get();
+		
+		String userName = authentication.getName();
+		
+		if(!character.getUser().getUsername().equals(userName)) {
+			return new ResponseEntity<>("Can only delete your own members", HttpStatus.UNAUTHORIZED);
+		}
+		characterRepository.delete(character);
+		
+		return ResponseEntity.noContent().build();
 	}
 }
