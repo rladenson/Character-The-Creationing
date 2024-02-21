@@ -69,18 +69,18 @@ public class CharacterController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> deleteCharacter(Authentication authentication, @PathVariable Long id) {
-		Optional<Character> characterMaybe = characterRepository.findById(id);
+		Optional<ComprehensiveCharacter> characterMaybe = ccRepository.findById(id);
 		if(characterMaybe.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
-		Character character = characterMaybe.get();
+		ComprehensiveCharacter character = characterMaybe.get();
 		
 		String userName = authentication.getName();
 		
-		if(!character.getUser().getUsername().equals(userName)) {
+		if(!character.getUsername().equals(userName)) {
 			return new ResponseEntity<>("Can only delete your own members", HttpStatus.UNAUTHORIZED);
 		}
-		characterRepository.delete(character);
+		characterRepository.deleteById(character.getId());
 		
 		return ResponseEntity.noContent().build();
 	}
