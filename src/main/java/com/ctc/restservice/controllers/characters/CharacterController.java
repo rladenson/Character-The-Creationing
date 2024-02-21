@@ -42,7 +42,6 @@ public class CharacterController {
 	CharacterRepository characterRepository;
 	@Autowired
 	ComprehensiveCharacterRepository ccRepository;
-	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@PostMapping("/new")
 	public ResponseEntity<?> newCharacter(Authentication authentication,
@@ -101,20 +100,23 @@ public class CharacterController {
 			return ResponseEntity.notFound().build();
 		Character character = characterMaybe.get();
 
-		if (character.getUser().getUsername() != authentication.getName())
+		User user = character.getUser();
+		if (user.getUsername() != authentication.getName())
 			new ResponseEntity<>("Can only edit your own members", HttpStatus.UNAUTHORIZED);
 
 		try {
 			Character patchedCharacter = applyPatchToCharacter(patch, character);
-			characterRepository.updateCharacter(patchedCharacter);
+			characterRepository.save(patchedCharacter);
 			return ResponseEntity.ok(patchedCharacter);
 		} catch (Exception e) {
+			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
 
 	private Character applyPatchToCharacter(JsonPatch patch, Character target)
 			throws JsonPatchException, JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode patched = patch.apply(objectMapper.convertValue(target, JsonNode.class));
 		return objectMapper.treeToValue(patched, Character.class);
 	}

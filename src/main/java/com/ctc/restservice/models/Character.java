@@ -112,10 +112,6 @@ public class Character {
 		this.age = age;
 	}
 
-	public void setAge(Optional<Integer> age) {
-		age.ifPresent(a -> this.age = a);
-	}
-
 	public String getRace() {
 		return race;
 	}
@@ -138,10 +134,6 @@ public class Character {
 
 	public void setAlignment(String alignment) {
 		this.alignment = alignment;
-	}
-
-	public void setAlignment(Optional<String> alignment) {
-		alignment.ifPresent(al -> this.alignment = al);
 	}
 
 	public String getCurrentClass() {
