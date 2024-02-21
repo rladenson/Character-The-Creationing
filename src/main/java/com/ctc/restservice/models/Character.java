@@ -37,6 +37,16 @@ public class Character {
 	@Size(max = 20)
 	@Column(name = "exaltation")
 	private String exaltation;
+	
+	@NotBlank
+	@Size(max=20)
+	@Column(name="resource")
+	private String resource;
+	
+	@NotBlank
+	@Size(max=20)
+	@Column(name="power")
+	private String power;
 
 	@Size(max = 20)
 	@Column(name = "alignment")
@@ -46,6 +56,9 @@ public class Character {
 	@Size(max = 32)
 	@Column(name = "class")
 	private String currentClass;
+	
+	@Column(name="completed_classes")
+	private String[] completedClasses;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -56,27 +69,19 @@ public class Character {
 	public Character() {
 	}
 
-	public Character(User user, String name, String race, String exaltation, String currentClass, Optional<Integer> age,
-			Optional<String> alignment) {
-		this.user = user;
-		this.name = name;
-		this.race = race;
-		this.exaltation = exaltation;
-		this.currentClass = currentClass;
-		age.ifPresent(a -> this.age = a);
-		alignment.ifPresent(al -> this.alignment = al);
-	}
-
 	public Character(User user, NewCharacterRequest newCharacterRequest) {
 		//mandatory values
 		this.user = user;
 		this.name = newCharacterRequest.name();
 		this.race = newCharacterRequest.race();
 		this.exaltation = newCharacterRequest.exaltation();
+		this.resource = newCharacterRequest.resource();
+		this.power = newCharacterRequest.power();
 		this.currentClass = newCharacterRequest.currentClass();
 		//optional values
 		newCharacterRequest.age().ifPresent(a -> this.age = a);
 		newCharacterRequest.alignment().ifPresent(al -> this.alignment = al);
+		newCharacterRequest.completedClasses().ifPresent(classes -> this.completedClasses = classes.split(", ?"));
 	}
 
 	public String getName() {
@@ -150,5 +155,25 @@ public class Character {
 
 	public void setCurrentClass(String currentClass) {
 		this.currentClass = currentClass;
+	}
+
+	public String getResource() {
+		return resource;
+	}
+
+	public void setResource(String resource) {
+		this.resource = resource;
+	}
+
+	public String getPower() {
+		return power;
+	}
+
+	public void setPower(String power) {
+		this.power = power;
+	}
+
+	public String[] getCompletedClasses() {
+		return completedClasses;
 	}
 }

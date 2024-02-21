@@ -29,9 +29,18 @@ public class ComprehensiveCharacter implements Serializable {
 
 	@Column(name = "class")
 	private String currentClass;
+	
+	@Column(name="completed_classes")
+	private String[] completedClasses;
 
 	@Column(name = "exaltation")
 	private String exaltation;
+	
+	@Column(name = "resource")
+	private String resource;
+	
+	@Column(name = "power")
+	private String power;
 
 	@Column(name = "race")
 	private String race;
@@ -61,9 +70,21 @@ public class ComprehensiveCharacter implements Serializable {
 	public String getCurrentClass() {
 		return currentClass;
 	}
+	
+	public String[] getCompletedClasses() {
+		return completedClasses;
+	}
 
 	public String getExaltation() {
 		return exaltation;
+	}
+	
+	public String getResource() {
+		return resource;
+	}
+	
+	public String getPower() {
+		return power;
 	}
 
 	public String getRace() {
