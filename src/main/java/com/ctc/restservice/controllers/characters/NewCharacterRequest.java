@@ -2,8 +2,11 @@ package com.ctc.restservice.controllers.characters;
 
 import java.util.Optional;
 
-public record NewCharacterRequest(String name, String race, String exaltation, String resource, String power, String currentClass,
-		Optional<Integer> age, Optional<String> alignment, Optional<String> completedClasses) {
+import com.ctc.restservice.models.Characteristics;
+
+public record NewCharacterRequest(String name, String race, String exaltation, String resource, String power,
+		String currentClass, Optional<Integer> age, Optional<String> alignment, Optional<String> completedClasses,
+		Optional<Characteristics> characteristics) {
 	public String name() {
 		return name;
 	}
@@ -19,11 +22,11 @@ public record NewCharacterRequest(String name, String race, String exaltation, S
 	public String resource() {
 		return resource;
 	}
-	
+
 	public String power() {
 		return power;
 	}
-	
+
 	public String currentClass() {
 		return currentClass;
 	}
@@ -38,5 +41,9 @@ public record NewCharacterRequest(String name, String race, String exaltation, S
 
 	public Optional<String> completedClasses() {
 		return completedClasses;
+	}
+
+	public Optional<Characteristics> characterisitics() {
+		return characteristics;
 	}
 }

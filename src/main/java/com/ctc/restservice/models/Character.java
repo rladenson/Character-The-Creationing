@@ -1,7 +1,5 @@
 package com.ctc.restservice.models;
 
-import java.util.Optional;
-
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -65,11 +63,17 @@ public class Character {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private User user;
+	
+	@OneToOne(fetch = FetchType.LAZY, optional = true)
+	@JoinColumn(name = "stats_id", referencedColumnName = "_stats_id", nullable = true)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JsonIgnore
+	private CharacterStats stats;
 
 	public Character() {
 	}
 
-	public Character(User user, NewCharacterRequest newCharacterRequest) {
+	public Character(User user, NewCharacterRequest newCharacterRequest, CharacterStats stats) {
 		//mandatory values
 		this.user = user;
 		this.name = newCharacterRequest.name();
@@ -82,6 +86,8 @@ public class Character {
 		newCharacterRequest.age().ifPresent(a -> this.age = a);
 		newCharacterRequest.alignment().ifPresent(al -> this.alignment = al);
 		newCharacterRequest.completedClasses().ifPresent(classes -> this.completedClasses = classes.split(", ?"));
+		
+		this.stats = stats;
 	}
 
 	public String getName() {
@@ -98,6 +104,10 @@ public class Character {
 	
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public CharacterStats getStats() {
+		return stats;
 	}
 
 	@Override
