@@ -106,10 +106,10 @@ public class CharacterController {
 
 		try {
 			Character patchedCharacter = applyPatchToCharacter(patch, character);
+			patchedCharacter.setUser(user);
 			characterRepository.save(patchedCharacter);
 			return ResponseEntity.ok(patchedCharacter);
 		} catch (Exception e) {
-			System.out.println(e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
