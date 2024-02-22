@@ -1,7 +1,5 @@
 package com.ctc.restservice.models;
 
-import java.util.Optional;
-
 import com.ctc.restservice.controllers.characters.NewCharacterRequest;
 
 import jakarta.persistence.Column;
@@ -10,45 +8,40 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 
 @Entity
 @Table(name = "character_stats")
 public class CharacterStats {
 
 	@Id
-	@Column(name = "_stats_id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "intelligence")
+	@Column(name = "intelligence", columnDefinition = "integer default 1")
 	private Integer intelligence;
 
-	@Column(name = "wisdom")
+	@Column(name = "wisdom", columnDefinition = "integer default 1")
 	private Integer wisdom;
 
-	@Column(name = "willpower")
+	@Column(name = "willpower", columnDefinition = "integer default 1")
 	private Integer willpower;
 
-	@Column(name = "strength")
+	@Column(name = "strength", columnDefinition = "integer default 1")
 	private Integer strength;
 
-	@Column(name = "dexterity")
+	@Column(name = "dexterity", columnDefinition = "integer default 1")
 	private Integer dexterity;
 
-	@Column(name = "constitution")
+	@Column(name = "constitution", columnDefinition = "integer default 1")
 	private Integer constitution;
 
-	@Column(name = "charisma")
+	@Column(name = "charisma", columnDefinition = "integer default 1")
 	private Integer charisma;
 
-	@Column(name = "fellowship")
+	@Column(name = "fellowship", columnDefinition = "integer default 1")
 	private Integer fellowship;
 
-	@Column(name = "composure")
+	@Column(name = "composure", columnDefinition = "integer default 1")
 	private Integer composure;
 
 //	@NotBlank
@@ -187,6 +180,11 @@ public class CharacterStats {
 		this.charisma = chars.getCharisma();
 		this.fellowship = chars.getFellowship();
 		this.composure = chars.getComposure();
+	}
+	
+	@Override
+	public String toString() {
+		return this.id.toString();
 	}
 
 	public Integer getIntelligence() {
