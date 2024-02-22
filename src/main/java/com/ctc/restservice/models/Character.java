@@ -67,7 +67,7 @@ public class Character {
 	private User user;
 	
 	@OneToOne(fetch = FetchType.LAZY, optional = true)
-	@JoinColumn(name = "stats_id", referencedColumnName = "_stats_id")
+	@JoinColumn(name = "stats_id", referencedColumnName = "_stats_id", nullable = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private CharacterStats stats;
@@ -102,6 +102,10 @@ public class Character {
 
 	public User getUser() {
 		return user;
+	}
+	
+	public CharacterStats getStats() {
+		return stats;
 	}
 
 	@Override

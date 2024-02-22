@@ -171,6 +171,10 @@ public class CharacterStats {
 //	@Column(name="size")
 //	private Integer size;
 	
+	public CharacterStats() {
+		
+	}
+	
 	public CharacterStats(NewCharacterRequest req) {
 		Characteristics chars = req.characterisitics().get();
 		
