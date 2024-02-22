@@ -95,6 +95,10 @@ public class Character {
 	public User getUser() {
 		return user;
 	}
+	
+	public void setUser(User user) {
+		this.user = user;
+	}
 
 	@Override
 	public String toString() {
@@ -115,10 +119,6 @@ public class Character {
 
 	public void setAge(Integer age) {
 		this.age = age;
-	}
-
-	public void setAge(Optional<Integer> age) {
-		age.ifPresent(a -> this.age = a);
 	}
 
 	public String getRace() {
@@ -143,10 +143,6 @@ public class Character {
 
 	public void setAlignment(String alignment) {
 		this.alignment = alignment;
-	}
-
-	public void setAlignment(Optional<String> alignment) {
-		alignment.ifPresent(al -> this.alignment = al);
 	}
 
 	public String getCurrentClass() {
