@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ctc.restservice.controllers.MessageResponse;
 import com.ctc.restservice.models.Character;
+import com.ctc.restservice.models.CharacterStats;
 import com.ctc.restservice.models.ComprehensiveCharacter;
 import com.ctc.restservice.models.User;
 import com.ctc.restservice.repository.CharacterRepository;
+import com.ctc.restservice.repository.CharacterStatsRepository;
 import com.ctc.restservice.repository.ComprehensiveCharacterRepository;
 import com.ctc.restservice.repository.UserRepository;
 
@@ -36,13 +38,18 @@ public class CharacterController {
 	CharacterRepository characterRepository;
 	@Autowired
 	ComprehensiveCharacterRepository ccRepository;
+	@Autowired
+	CharacterStatsRepository statsRepository;
 	
 	@PostMapping("/new")
 	public ResponseEntity<?> newCharacter(Authentication authentication, @Valid @RequestBody NewCharacterRequest newCharacterRequest) {
 		String userName = authentication.getName();
 		User user = userRepository.findByUsername(userName).get();
-		Character character = new Character(user, newCharacterRequest);
 		
+		CharacterStats stats = new CharacterStats(newCharacterRequest);
+		Character character = new Character(user, newCharacterRequest, stats);
+		
+		statsRepository.save(stats);
 		characterRepository.save(character);
 		
 		return ResponseEntity.ok(new MessageResponse("Yay!"));
