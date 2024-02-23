@@ -75,9 +75,8 @@ public class CharacterController {
 			return ResponseEntity.notFound().build();
 		}
 		Character character = characterMaybe.get();
-		CharacterStats stats = character.getStats();
 		
-		return ResponseEntity.ok().body(new FullCharacterResponse(character, stats, character.getUser().getId(), character.getUser().getUsername()));
+		return ResponseEntity.ok().body(new FullCharacterResponse(character, character.getUser().getId(), character.getUser().getUsername()));
 	}
 
 	@DeleteMapping("/{id}")
@@ -107,8 +106,8 @@ public class CharacterController {
 		Character character = characterMaybe.get();
 
 		User user = character.getUser();
-		if (user.getUsername() != authentication.getName())
-			new ResponseEntity<>("Can only edit your own members", HttpStatus.UNAUTHORIZED);
+		if (!user.getUsername().equals(authentication.getName()))
+			return new ResponseEntity<>("Can only edit your own members", HttpStatus.UNAUTHORIZED);
 
 		try {
 			Character patchedCharacter = applyPatchToCharacter(patch, character);
@@ -125,5 +124,35 @@ public class CharacterController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode patched = patch.apply(objectMapper.convertValue(target, JsonNode.class));
 		return objectMapper.treeToValue(patched, Character.class);
+	}
+	
+	@PatchMapping(path = "/{id}/stats", consumes = "application/json-patch+json")
+	public ResponseEntity<?> updateCharacterStats(Authentication authentication, @PathVariable Long id,
+			@RequestBody JsonPatch patch) {
+		Optional<Character> characterMaybe = characterRepository.findById(id);
+		if (characterMaybe.isEmpty())
+			return ResponseEntity.notFound().build();
+		Character character = characterMaybe.get();
+
+		User user = character.getUser();
+		if (!user.getUsername().equals(authentication.getName()))
+			return new ResponseEntity<>("Can only edit your own members", HttpStatus.UNAUTHORIZED);
+		
+		CharacterStats stats = character.getStats();
+
+		try {
+			CharacterStats patchedStats = applyPatchToStats(patch, stats);
+			statsRepository.save(patchedStats);
+			return ResponseEntity.ok(patchedStats);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	private CharacterStats applyPatchToStats(JsonPatch patch, CharacterStats target)
+			throws JsonPatchException, JsonProcessingException {
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode patched = patch.apply(objectMapper.convertValue(target, JsonNode.class));
+		return objectMapper.treeToValue(patched, CharacterStats.class);
 	}
 }

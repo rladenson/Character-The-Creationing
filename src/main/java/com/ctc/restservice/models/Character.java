@@ -64,10 +64,9 @@ public class Character {
 	@JsonIgnore
 	private User user;
 	
-	@OneToOne(fetch = FetchType.LAZY, optional = true)
+	@OneToOne(fetch = FetchType.EAGER, optional = true)
 	@JoinColumn(name = "stats_id", referencedColumnName = "id", nullable = true)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JsonIgnore
 	private CharacterStats stats;
 
 	public Character() {
@@ -181,5 +180,9 @@ public class Character {
 
 	public String[] getCompletedClasses() {
 		return completedClasses;
+	}
+
+	public void setStats(CharacterStats stats) {
+		this.stats = stats;
 	}
 }
