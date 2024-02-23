@@ -5,8 +5,8 @@ import java.util.Optional;
 import com.ctc.restservice.models.Characteristics;
 
 public record NewCharacterRequest(String name, String race, String exaltation, String resource, String power,
-		String currentClass, Optional<Integer> age, Optional<String> alignment, Optional<String> completedClasses,
-		Optional<Characteristics> characteristics) {
+		String currentClass, Optional<String> age, Optional<String> alignment, Optional<String> completedClasses,
+		Optional<Characteristics> characteristics, Optional<Integer> level) {
 	public String name() {
 		return name;
 	}
@@ -31,7 +31,7 @@ public record NewCharacterRequest(String name, String race, String exaltation, S
 		return currentClass;
 	}
 
-	public Optional<Integer> age() {
+	public Optional<String> age() {
 		return age;
 	}
 
@@ -45,5 +45,9 @@ public record NewCharacterRequest(String name, String race, String exaltation, S
 
 	public Optional<Characteristics> characterisitics() {
 		return characteristics;
+	}
+	
+	public Optional<Integer> level() {
+		return level;
 	}
 }

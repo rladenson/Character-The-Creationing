@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -23,8 +24,9 @@ public class Character {
 	@Column(name = "name")
 	private String name;
 
+	@Positive
 	@Column(name = "age")
-	private Integer age;
+	private String age;
 
 	@NotBlank
 	@Size(max = 20)
@@ -57,6 +59,10 @@ public class Character {
 	
 	@Column(name="completed_classes")
 	private String[] completedClasses;
+	
+	@Column(name="level")
+	@Positive
+	private Integer level;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -85,6 +91,7 @@ public class Character {
 		newCharacterRequest.age().ifPresent(a -> this.age = a);
 		newCharacterRequest.alignment().ifPresent(al -> this.alignment = al);
 		newCharacterRequest.completedClasses().ifPresent(classes -> this.completedClasses = classes.split(", ?"));
+		newCharacterRequest.level().ifPresent(lvl -> this.level = lvl);
 		
 		this.stats = stats;
 	}
@@ -122,11 +129,11 @@ public class Character {
 		this.id = id;
 	}
 
-	public Integer getAge() {
+	public String getAge() {
 		return age;
 	}
 
-	public void setAge(Integer age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
 
@@ -184,5 +191,13 @@ public class Character {
 
 	public void setStats(CharacterStats stats) {
 		this.stats = stats;
+	}
+	
+	public Integer getLevel() {
+		return level;
+	}
+	
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 }

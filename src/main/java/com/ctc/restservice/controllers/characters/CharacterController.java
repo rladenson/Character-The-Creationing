@@ -56,7 +56,7 @@ public class CharacterController {
 		statsRepository.save(stats);
 		characterRepository.save(character);
 
-		return ResponseEntity.ok(new MessageResponse("Yay!"));
+		return ResponseEntity.status(HttpStatus.CREATED).body(new CharacterResponse(character));
 	}
 
 	@GetMapping("")
