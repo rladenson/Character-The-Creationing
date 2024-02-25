@@ -6,7 +6,7 @@ import com.ctc.restservice.models.Characteristics;
 
 public record NewCharacterRequest(String name, String race, String exaltation, String resource, String power,
 		String currentClass, Optional<String> age, Optional<String> alignment, Optional<String> completedClasses,
-		Optional<Characteristics> characteristics, Optional<Integer> level) {
+		Optional<Characteristics> characteristics, Optional<Integer> level, Optional<Integer> size, Optional<Long> xp) {
 	public String name() {
 		return name;
 	}
@@ -49,5 +49,13 @@ public record NewCharacterRequest(String name, String race, String exaltation, S
 	
 	public Optional<Integer> level() {
 		return level;
+	}
+	
+	public Optional<Integer> size() {
+		return size;
+	}
+	
+	public Optional<Long> xp() {
+		return xp;
 	}
 }

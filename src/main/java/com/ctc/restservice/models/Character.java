@@ -59,10 +59,6 @@ public class Character {
 	
 	@Column(name="completed_classes")
 	private String[] completedClasses;
-	
-	@Column(name="level")
-	@Positive
-	private Integer level;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -91,7 +87,6 @@ public class Character {
 		newCharacterRequest.age().ifPresent(a -> this.age = a);
 		newCharacterRequest.alignment().ifPresent(al -> this.alignment = al);
 		newCharacterRequest.completedClasses().ifPresent(classes -> this.completedClasses = classes.split(", ?"));
-		newCharacterRequest.level().ifPresent(lvl -> this.level = lvl);
 		
 		this.stats = stats;
 	}
@@ -191,13 +186,5 @@ public class Character {
 
 	public void setStats(CharacterStats stats) {
 		this.stats = stats;
-	}
-	
-	public Integer getLevel() {
-		return level;
-	}
-	
-	public void setLevel(Integer level) {
-		this.level = level;
 	}
 }

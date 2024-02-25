@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 
 @Entity
 @Table(name = "character_stats")
@@ -43,6 +44,16 @@ public class CharacterStats {
 
 	@Column(name = "composure", columnDefinition = "integer default 1")
 	private Integer composure;
+	
+	@Column(name = "size", columnDefinition = "integer default 4")
+	private Integer size;
+	
+	@Column(name = "xp", columnDefinition = "bigint default 600")
+	private Long xp;
+	
+	@Column(name="level", columnDefinition = "integer default 1")
+	@Positive
+	private Integer level;
 
 //	@NotBlank
 //	@Column(name = "academic_lore")
@@ -180,6 +191,10 @@ public class CharacterStats {
 		this.charisma = chars.getCharisma();
 		this.fellowship = chars.getFellowship();
 		this.composure = chars.getComposure();
+		
+		req.size().ifPresent(s -> this.size = s);
+		req.xp().ifPresent(exp -> this.xp = exp);
+		req.level().ifPresent(lvl -> this.level = lvl);
 	}
 	
 	@Override
@@ -261,6 +276,30 @@ public class CharacterStats {
 
 	public Long getId() {
 		return id;
+	}
+
+	public Integer getSize() {
+		return size;
+	}
+
+	public void setSize(Integer size) {
+		this.size = size;
+	}
+
+	public Long getXp() {
+		return xp;
+	}
+
+	public void setXp(Long xp) {
+		this.xp = xp;
+	}
+	
+	public Integer getLevel() {
+		return level;
+	}
+	
+	public void setLevel(Integer level) {
+		this.level = level;
 	}
 
 }

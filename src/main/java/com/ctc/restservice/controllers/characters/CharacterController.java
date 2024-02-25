@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ctc.restservice.controllers.MessageResponse;
 import com.ctc.restservice.models.Character;
 import com.ctc.restservice.models.CharacterStats;
+import com.ctc.restservice.models.DerivedCharacterStats;
 import com.ctc.restservice.models.User;
 import com.ctc.restservice.repository.CharacterRepository;
 import com.ctc.restservice.repository.CharacterStatsRepository;
+import com.ctc.restservice.repository.DerivedCharacterStatsRepository;
 import com.ctc.restservice.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -42,6 +44,8 @@ public class CharacterController {
 	CharacterRepository characterRepository;
 	@Autowired
 	CharacterStatsRepository statsRepository;
+	@Autowired
+	DerivedCharacterStatsRepository derivedRepository;
 	
 
 	@PostMapping("/new")
@@ -75,8 +79,9 @@ public class CharacterController {
 			return ResponseEntity.notFound().build();
 		}
 		Character character = characterMaybe.get();
+		DerivedCharacterStats derived = derivedRepository.findByStatsId(character.getStats().getId());
 		
-		return ResponseEntity.ok().body(new FullCharacterResponse(character, character.getUser().getId(), character.getUser().getUsername()));
+		return ResponseEntity.ok().body(new FullCharacterResponse(character, derived, character.getUser().getId(), character.getUser().getUsername()));
 	}
 
 	@DeleteMapping("/{id}")
