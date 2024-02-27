@@ -2,11 +2,13 @@ package com.ctc.restservice.controllers.characters;
 
 import java.util.Optional;
 
-import com.ctc.restservice.models.Characteristics;
+import com.ctc.restservice.middleware.Characteristics;
+import com.ctc.restservice.middleware.Skills;
 
 public record NewCharacterRequest(String name, String race, String exaltation, String resource, String power,
 		String currentClass, Optional<String> age, Optional<String> alignment, Optional<String> completedClasses,
-		Optional<Characteristics> characteristics, Optional<Integer> level, Optional<Integer> size, Optional<Long> xp) {
+		Optional<Characteristics> characteristics, Optional<Integer> level, Optional<Integer> size, Optional<Long> xp,
+		Optional<Skills> skills) {
 	public String name() {
 		return name;
 	}
@@ -47,14 +49,18 @@ public record NewCharacterRequest(String name, String race, String exaltation, S
 		return characteristics;
 	}
 	
+	public Optional<Skills> skills() {
+		return skills;
+	}
+
 	public Optional<Integer> level() {
 		return level;
 	}
-	
+
 	public Optional<Integer> size() {
 		return size;
 	}
-	
+
 	public Optional<Long> xp() {
 		return xp;
 	}

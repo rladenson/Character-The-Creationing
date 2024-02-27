@@ -1,4 +1,4 @@
-package com.ctc.restservice.models;
+package com.ctc.restservice.middleware;
 
 public class Characteristics {
 	private Integer intelligence;
