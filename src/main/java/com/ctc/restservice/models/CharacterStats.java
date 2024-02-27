@@ -1,10 +1,10 @@
 package com.ctc.restservice.models;
 
 import com.ctc.restservice.controllers.characters.NewCharacterRequest;
-import com.ctc.restservice.middleware.Characteristics;
-import com.ctc.restservice.middleware.MentalSkills;
-import com.ctc.restservice.middleware.PhysicalSkills;
-import com.ctc.restservice.middleware.SocialSkills;
+import com.ctc.restservice.models.helpers.Characteristics;
+import com.ctc.restservice.models.helpers.MentalSkills;
+import com.ctc.restservice.models.helpers.PhysicalSkills;
+import com.ctc.restservice.models.helpers.SocialSkills;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

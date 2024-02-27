@@ -2,8 +2,8 @@ package com.ctc.restservice.controllers.characters;
 
 import java.util.Optional;
 
-import com.ctc.restservice.middleware.Characteristics;
-import com.ctc.restservice.middleware.Skills;
+import com.ctc.restservice.models.helpers.Characteristics;
+import com.ctc.restservice.models.helpers.Skills;
 
 public record NewCharacterRequest(String name, String race, String exaltation, String resource, String power,
 		String currentClass, Optional<String> age, Optional<String> alignment, Optional<String> completedClasses,

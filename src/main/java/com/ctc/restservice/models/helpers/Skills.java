@@ -1,4 +1,4 @@
-package com.ctc.restservice.middleware;
+package com.ctc.restservice.models.helpers;
 
 public class Skills {
 	public Skills(MentalSkills mental, PhysicalSkills physical, SocialSkills social) {
