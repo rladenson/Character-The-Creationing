@@ -3,12 +3,14 @@ package com.ctc.restservice.controllers.characters;
 import java.util.Optional;
 
 import com.ctc.restservice.models.helpers.Characteristics;
-import com.ctc.restservice.models.helpers.Skills;
+import com.ctc.restservice.models.helpers.MentalSkills;
+import com.ctc.restservice.models.helpers.PhysicalSkills;
+import com.ctc.restservice.models.helpers.SocialSkills;
 
 public record NewCharacterRequest(String name, String race, String exaltation, String resource, String power,
 		String currentClass, Optional<String> age, Optional<String> alignment, Optional<String> completedClasses,
-		Optional<Characteristics> characteristics, Optional<Integer> level, Optional<Integer> size, Optional<Long> xp,
-		Optional<Skills> skills) {
+		Characteristics characteristics, Optional<Integer> level, Integer size, Optional<Long> xp,
+		MentalSkills mentalSkills, PhysicalSkills physicalSkills, SocialSkills socialSkills) {
 	public String name() {
 		return name;
 	}
@@ -45,23 +47,35 @@ public record NewCharacterRequest(String name, String race, String exaltation, S
 		return completedClasses;
 	}
 
-	public Optional<Characteristics> characterisitics() {
+	public Characteristics characterisitics() {
 		return characteristics;
-	}
-	
-	public Optional<Skills> skills() {
-		return skills;
 	}
 
 	public Optional<Integer> level() {
 		return level;
 	}
 
-	public Optional<Integer> size() {
+	public Integer size() {
 		return size;
 	}
 
 	public Optional<Long> xp() {
 		return xp;
+	}
+
+	public Characteristics characteristics() {
+		return characteristics;
+	}
+
+	public MentalSkills mentalSkills() {
+		return mentalSkills;
+	}
+
+	public PhysicalSkills physicalSkills() {
+		return physicalSkills;
+	}
+
+	public SocialSkills socialSkills() {
+		return socialSkills;
 	}
 }

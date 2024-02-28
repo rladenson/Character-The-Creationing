@@ -157,11 +157,11 @@ public class CharacterStats {
 	}
 
 	public CharacterStats(NewCharacterRequest req) {
-		Characteristics chars = req.characterisitics().get();
-		MentalSkills mental = req.skills().get().getMental();
-		PhysicalSkills physical = req.skills().get().getPhysical();
-		SocialSkills social = req.skills().get().getSocial();
-
+		Characteristics chars = req.characterisitics();
+		MentalSkills mental = req.mentalSkills();
+		PhysicalSkills physical = req.physicalSkills();
+		SocialSkills social = req.socialSkills();
+ 
 		this.intelligence = chars.getIntelligence();
 		this.wisdom = chars.getWisdom();
 		this.willpower = chars.getWillpower();
@@ -202,7 +202,8 @@ public class CharacterStats {
 		this.persuasion = social.getPersuasion();
 		this.scrutiny = social.getScrutiny();
 
-		req.size().ifPresent(s -> this.size = s);
+		this.size = req.size();
+		
 		req.xp().ifPresent(exp -> this.xp = exp);
 		req.level().ifPresent(lvl -> this.level = lvl);
 	}
