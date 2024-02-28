@@ -6,11 +6,14 @@ import com.ctc.restservice.models.helpers.MentalSkills;
 import com.ctc.restservice.models.helpers.PhysicalSkills;
 import com.ctc.restservice.models.helpers.SocialSkills;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Positive;
 
@@ -145,6 +148,10 @@ public class CharacterStats {
 //	@Column(name = "devotion")
 //	private Integer devotion;
 
+	@OneToOne(cascade = CascadeType.ALL)
+	@MapsId
+	private Character character;
+
 	public CharacterStats() {
 
 	}
@@ -164,7 +171,7 @@ public class CharacterStats {
 		this.charisma = chars.getCharisma();
 		this.fellowship = chars.getFellowship();
 		this.composure = chars.getComposure();
-		
+
 		this.academicLore = mental.getAcademicLore();
 		this.arcana = mental.getArcana();
 		this.commonLore = mental.getCommonLore();
@@ -174,7 +181,7 @@ public class CharacterStats {
 		this.perception = mental.getPerception();
 		this.politics = mental.getPolitics();
 		this.techUse = mental.getTechUse();
-		
+
 		this.acrobatics = physical.getAcrobatics();
 		this.athletics = physical.getAthletics();
 		this.drive = physical.getDrive();
@@ -184,7 +191,7 @@ public class CharacterStats {
 		this.ballistics = physical.getBallistics();
 		this.brawl = physical.getBrawl();
 		this.weaponry = physical.getWeaponry();
-		
+
 		this.animalKen = social.getAnimalKen();
 		this.charm = social.getCharm();
 		this.command = social.getCommand();
@@ -519,6 +526,10 @@ public class CharacterStats {
 
 	public void setScrutiny(Integer scrutiny) {
 		this.scrutiny = scrutiny;
+	}
+
+	public void setCharacter(Character character) {
+		this.character = character;
 	}
 
 }

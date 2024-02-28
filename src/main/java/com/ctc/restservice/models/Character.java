@@ -66,15 +66,16 @@ public class Character {
 	@JsonIgnore
 	private User user;
 	
-	@OneToOne(fetch = FetchType.EAGER, optional = true)
-	@JoinColumn(name = "stats_id", referencedColumnName = "id", nullable = true)
-	@OnDelete(action = OnDeleteAction.CASCADE)
+	@OneToOne(mappedBy = "character", cascade = CascadeType.ALL)
 	private CharacterStats stats;
 
 	public Character() {
 	}
 
-	public Character(User user, NewCharacterRequest newCharacterRequest, CharacterStats stats) {
+	public Character(User user, NewCharacterRequest newCharacterRequest) {
+		this.stats = new CharacterStats(newCharacterRequest);
+		this.stats.setCharacter(this);
+		
 		//mandatory values
 		this.user = user;
 		this.name = newCharacterRequest.name();
@@ -87,8 +88,6 @@ public class Character {
 		newCharacterRequest.age().ifPresent(a -> this.age = a);
 		newCharacterRequest.alignment().ifPresent(al -> this.alignment = al);
 		newCharacterRequest.completedClasses().ifPresent(classes -> this.completedClasses = classes.split(", ?"));
-		
-		this.stats = stats;
 	}
 
 	public String getName() {

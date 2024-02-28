@@ -32,8 +32,8 @@ public class DerivedCharacterStats {
 	private Integer initiative;
 
 	@Id
-	@Column(name = "stats_id")
-	private Long statsId;
+	@Column(name = "character_id")
+	private Long characterId;
 
 	public DerivedCharacterStats() {
 
@@ -67,7 +67,7 @@ public class DerivedCharacterStats {
 		return initiative;
 	}
 
-	public Long getStatsId() {
-		return statsId;
+	public Long getCharacterId() {
+		return characterId;
 	}
 }

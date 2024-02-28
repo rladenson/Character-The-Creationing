@@ -54,10 +54,8 @@ public class CharacterController {
 		String userName = authentication.getName();
 		User user = userRepository.findByUsername(userName).get();
 		
-		CharacterStats stats = new CharacterStats(newCharacterRequest);
-		Character character = new Character(user, newCharacterRequest, stats);
+		Character character = new Character(user, newCharacterRequest);
 		
-		statsRepository.save(stats);
 		characterRepository.save(character);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(new CharacterResponse(character));
@@ -79,7 +77,7 @@ public class CharacterController {
 			return ResponseEntity.notFound().build();
 		}
 		Character character = characterMaybe.get();
-		DerivedCharacterStats derived = derivedRepository.findByStatsId(character.getStats().getId());
+		DerivedCharacterStats derived = derivedRepository.findByCharacterId(character.getId());
 		
 		return ResponseEntity.ok().body(new FullCharacterResponse(character, derived, character.getUser().getId(), character.getUser().getUsername()));
 	}
