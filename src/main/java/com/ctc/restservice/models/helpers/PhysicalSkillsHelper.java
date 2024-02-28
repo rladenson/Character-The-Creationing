@@ -2,8 +2,8 @@ package com.ctc.restservice.models.helpers;
 
 import java.util.Optional;
 
-public class PhysicalSkills {
-	public PhysicalSkills(Optional<Integer> acrobatics, Optional<Integer> athletics, Optional<Integer> drive,
+public class PhysicalSkillsHelper {
+	public PhysicalSkillsHelper(Optional<Integer> acrobatics, Optional<Integer> athletics, Optional<Integer> drive,
 			Optional<Integer> larceny, Optional<Integer> pilot, Optional<Integer> stealth, Optional<Integer> ballistics,
 			Optional<Integer> brawl, Optional<Integer> weaponry) {
 		acrobatics.ifPresentOrElse(a -> this.acrobatics = a, () -> this.acrobatics = 0);

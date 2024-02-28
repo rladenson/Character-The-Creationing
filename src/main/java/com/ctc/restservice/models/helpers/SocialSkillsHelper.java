@@ -2,8 +2,8 @@ package com.ctc.restservice.models.helpers;
 
 import java.util.Optional;
 
-public class SocialSkills {
-	public SocialSkills(Optional<Integer> animalKen, Optional<Integer> charm, Optional<Integer> command,
+public class SocialSkillsHelper {
+	public SocialSkillsHelper(Optional<Integer> animalKen, Optional<Integer> charm, Optional<Integer> command,
 			Optional<Integer> deceive, Optional<Integer> disguise, Optional<Integer> intimidation,
 			Optional<Integer> performer, Optional<Integer> persuasion, Optional<Integer> scrutiny) {
 		animalKen.ifPresentOrElse(a -> this.animalKen = a, () -> this.animalKen = 0);

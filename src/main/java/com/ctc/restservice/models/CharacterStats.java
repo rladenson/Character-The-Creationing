@@ -2,9 +2,9 @@ package com.ctc.restservice.models;
 
 import com.ctc.restservice.controllers.characters.NewCharacterRequest;
 import com.ctc.restservice.models.helpers.Characteristics;
-import com.ctc.restservice.models.helpers.MentalSkills;
-import com.ctc.restservice.models.helpers.PhysicalSkills;
-import com.ctc.restservice.models.helpers.SocialSkills;
+import com.ctc.restservice.models.helpers.MentalSkillsHelper;
+import com.ctc.restservice.models.helpers.PhysicalSkillsHelper;
+import com.ctc.restservice.models.helpers.SocialSkillsHelper;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -62,87 +62,6 @@ public class CharacterStats {
 	@Positive
 	private Integer level;
 
-	@Column(name = "academic_lore", columnDefinition = "integer default 0")
-	private Integer academicLore;
-
-	@Column(name = "arcana", columnDefinition = "integer default 0")
-	private Integer arcana;
-
-	@Column(name = "common_lore", columnDefinition = "integer default 0")
-	private Integer commonLore;
-
-	@Column(name = "crafts", columnDefinition = "integer default 0")
-	private Integer crafts;
-
-	@Column(name = "forbidden_lore", columnDefinition = "integer default 0")
-	private Integer forbiddenLore;
-
-	@Column(name = "medicae", columnDefinition = "integer default 0")
-	private Integer medicae;
-
-	@Column(name = "perception", columnDefinition = "integer default 0")
-	private Integer perception;
-
-	@Column(name = "politics", columnDefinition = "integer default 0")
-	private Integer politics;
-
-	@Column(name = "tech_use", columnDefinition = "integer default 0")
-	private Integer techUse;
-
-	@Column(name = "acrobatics", columnDefinition = "integer default 0")
-	private Integer acrobatics;
-
-	@Column(name = "athletics", columnDefinition = "integer default 0")
-	private Integer athletics;
-
-	@Column(name = "drive", columnDefinition = "integer default 0")
-	private Integer drive;
-
-	@Column(name = "larceny", columnDefinition = "integer default 0")
-	private Integer larceny;
-
-	@Column(name = "pilot", columnDefinition = "integer default 0")
-	private Integer pilot;
-
-	@Column(name = "stealth", columnDefinition = "integer default 0")
-	private Integer stealth;
-
-	@Column(name = "ballistics", columnDefinition = "integer default 0")
-	private Integer ballistics;
-
-	@Column(name = "brawl", columnDefinition = "integer default 0")
-	private Integer brawl;
-
-	@Column(name = "weaponry", columnDefinition = "integer default 0")
-	private Integer weaponry;
-
-	@Column(name = "animal_ken", columnDefinition = "integer default 0")
-	private Integer animalKen;
-
-	@Column(name = "charm", columnDefinition = "integer default 0")
-	private Integer charm;
-
-	@Column(name = "command", columnDefinition = "integer default 0")
-	private Integer command;
-
-	@Column(name = "deceive", columnDefinition = "integer default 0")
-	private Integer deceive;
-
-	@Column(name = "disguise", columnDefinition = "integer default 0")
-	private Integer disguise;
-
-	@Column(name = "intimidation", columnDefinition = "integer default 0")
-	private Integer intimidation;
-
-	@Column(name = "performer", columnDefinition = "integer default 0")
-	private Integer performer;
-
-	@Column(name = "persuasion", columnDefinition = "integer default 0")
-	private Integer persuasion;
-
-	@Column(name = "scrutiny", columnDefinition = "integer default 0")
-	private Integer scrutiny;
-
 //	@PositiveOrZero
 //	@Max(value=10)
 //	@Column(name = "devotion")
@@ -152,16 +71,30 @@ public class CharacterStats {
 	@MapsId
 	private Character character;
 
+	@OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
+	private MentalSkills mentalSkills;
+
+	@OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
+	private PhysicalSkills physicalSkills;
+
+	@OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
+	private SocialSkills socialSkills;
+
 	public CharacterStats() {
 
 	}
 
-	public CharacterStats(NewCharacterRequest req) {
+	public CharacterStats(NewCharacterRequest req, Character character) {
+		MentalSkillsHelper mental = req.mentalSkills();
+		PhysicalSkillsHelper physical = req.physicalSkills();
+		SocialSkillsHelper social = req.socialSkills();
+
+		this.mentalSkills = new MentalSkills(mental, this);
+		this.physicalSkills = new PhysicalSkills(physical, this);
+		this.socialSkills = new SocialSkills(social, this);
+
 		Characteristics chars = req.characterisitics();
-		MentalSkills mental = req.mentalSkills();
-		PhysicalSkills physical = req.physicalSkills();
-		SocialSkills social = req.socialSkills();
- 
+
 		this.intelligence = chars.getIntelligence();
 		this.wisdom = chars.getWisdom();
 		this.willpower = chars.getWillpower();
@@ -172,40 +105,12 @@ public class CharacterStats {
 		this.fellowship = chars.getFellowship();
 		this.composure = chars.getComposure();
 
-		this.academicLore = mental.getAcademicLore();
-		this.arcana = mental.getArcana();
-		this.commonLore = mental.getCommonLore();
-		this.crafts = mental.getCrafts();
-		this.forbiddenLore = mental.getForbiddenLore();
-		this.medicae = mental.getMedicae();
-		this.perception = mental.getPerception();
-		this.politics = mental.getPolitics();
-		this.techUse = mental.getTechUse();
-
-		this.acrobatics = physical.getAcrobatics();
-		this.athletics = physical.getAthletics();
-		this.drive = physical.getDrive();
-		this.larceny = physical.getLarceny();
-		this.pilot = physical.getPilot();
-		this.stealth = physical.getStealth();
-		this.ballistics = physical.getBallistics();
-		this.brawl = physical.getBrawl();
-		this.weaponry = physical.getWeaponry();
-
-		this.animalKen = social.getAnimalKen();
-		this.charm = social.getCharm();
-		this.command = social.getCommand();
-		this.deceive = social.getDeceive();
-		this.disguise = social.getDisguise();
-		this.intimidation = social.getIntimidation();
-		this.performer = social.getPerformer();
-		this.persuasion = social.getPersuasion();
-		this.scrutiny = social.getScrutiny();
-
 		this.size = req.size();
-		
+
 		req.xp().ifPresent(exp -> this.xp = exp);
 		req.level().ifPresent(lvl -> this.level = lvl);
+
+		this.character = character;
 	}
 
 	@Override
@@ -313,224 +218,16 @@ public class CharacterStats {
 		this.level = level;
 	}
 
-	public Integer getAcademicLore() {
-		return academicLore;
+	public MentalSkills getMentalSkills() {
+		return mentalSkills;
 	}
 
-	public void setAcademicLore(Integer academicLore) {
-		this.academicLore = academicLore;
+	public PhysicalSkills getPhysicalSkills() {
+		return physicalSkills;
 	}
 
-	public Integer getArcana() {
-		return arcana;
-	}
-
-	public void setArcana(Integer arcana) {
-		this.arcana = arcana;
-	}
-
-	public Integer getCommonLore() {
-		return commonLore;
-	}
-
-	public void setCommonLore(Integer commonLore) {
-		this.commonLore = commonLore;
-	}
-
-	public Integer getCrafts() {
-		return crafts;
-	}
-
-	public void setCrafts(Integer crafts) {
-		this.crafts = crafts;
-	}
-
-	public Integer getForbiddenLore() {
-		return forbiddenLore;
-	}
-
-	public void setForbiddenLore(Integer forbiddenLore) {
-		this.forbiddenLore = forbiddenLore;
-	}
-
-	public Integer getMedicae() {
-		return medicae;
-	}
-
-	public void setMedicae(Integer medicae) {
-		this.medicae = medicae;
-	}
-
-	public Integer getPerception() {
-		return perception;
-	}
-
-	public void setPerception(Integer perception) {
-		this.perception = perception;
-	}
-
-	public Integer getPolitics() {
-		return politics;
-	}
-
-	public void setPolitics(Integer politics) {
-		this.politics = politics;
-	}
-
-	public Integer getTechUse() {
-		return techUse;
-	}
-
-	public void setTechUse(Integer techUse) {
-		this.techUse = techUse;
-	}
-
-	public Integer getAcrobatics() {
-		return acrobatics;
-	}
-
-	public void setAcrobatics(Integer acrobatics) {
-		this.acrobatics = acrobatics;
-	}
-
-	public Integer getAthletics() {
-		return athletics;
-	}
-
-	public void setAthletics(Integer athletics) {
-		this.athletics = athletics;
-	}
-
-	public Integer getDrive() {
-		return drive;
-	}
-
-	public void setDrive(Integer drive) {
-		this.drive = drive;
-	}
-
-	public Integer getLarceny() {
-		return larceny;
-	}
-
-	public void setLarceny(Integer larceny) {
-		this.larceny = larceny;
-	}
-
-	public Integer getPilot() {
-		return pilot;
-	}
-
-	public void setPilot(Integer pilot) {
-		this.pilot = pilot;
-	}
-
-	public Integer getStealth() {
-		return stealth;
-	}
-
-	public void setStealth(Integer stealth) {
-		this.stealth = stealth;
-	}
-
-	public Integer getBallistics() {
-		return ballistics;
-	}
-
-	public void setBallistics(Integer ballistics) {
-		this.ballistics = ballistics;
-	}
-
-	public Integer getBrawl() {
-		return brawl;
-	}
-
-	public void setBrawl(Integer brawl) {
-		this.brawl = brawl;
-	}
-
-	public Integer getWeaponry() {
-		return weaponry;
-	}
-
-	public void setWeaponry(Integer weaponry) {
-		this.weaponry = weaponry;
-	}
-
-	public Integer getAnimalKen() {
-		return animalKen;
-	}
-
-	public void setAnimalKen(Integer animalKen) {
-		this.animalKen = animalKen;
-	}
-
-	public Integer getCharm() {
-		return charm;
-	}
-
-	public void setCharm(Integer charm) {
-		this.charm = charm;
-	}
-
-	public Integer getCommand() {
-		return command;
-	}
-
-	public void setCommand(Integer command) {
-		this.command = command;
-	}
-
-	public Integer getDeceive() {
-		return deceive;
-	}
-
-	public void setDeceive(Integer deceive) {
-		this.deceive = deceive;
-	}
-
-	public Integer getDisguise() {
-		return disguise;
-	}
-
-	public void setDisguise(Integer disguise) {
-		this.disguise = disguise;
-	}
-
-	public Integer getIntimidation() {
-		return intimidation;
-	}
-
-	public void setIntimidation(Integer intimidation) {
-		this.intimidation = intimidation;
-	}
-
-	public Integer getPerformer() {
-		return performer;
-	}
-
-	public void setPerformer(Integer performer) {
-		this.performer = performer;
-	}
-
-	public Integer getPersuasion() {
-		return persuasion;
-	}
-
-	public void setPersuasion(Integer persuasion) {
-		this.persuasion = persuasion;
-	}
-
-	public Integer getScrutiny() {
-		return scrutiny;
-	}
-
-	public void setScrutiny(Integer scrutiny) {
-		this.scrutiny = scrutiny;
-	}
-
-	public void setCharacter(Character character) {
-		this.character = character;
+	public SocialSkills getSocialSkills() {
+		return socialSkills;
 	}
 
 }

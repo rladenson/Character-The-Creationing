@@ -37,15 +37,15 @@ public class Character {
 	@Size(max = 20)
 	@Column(name = "exaltation")
 	private String exaltation;
-	
+
 	@NotBlank
-	@Size(max=20)
-	@Column(name="resource")
+	@Size(max = 20)
+	@Column(name = "resource")
 	private String resource;
-	
+
 	@NotBlank
-	@Size(max=20)
-	@Column(name="power")
+	@Size(max = 20)
+	@Column(name = "power")
 	private String power;
 
 	@Size(max = 20)
@@ -56,8 +56,8 @@ public class Character {
 	@Size(max = 32)
 	@Column(name = "class")
 	private String currentClass;
-	
-	@Column(name="completed_classes")
+
+	@Column(name = "completed_classes")
 	private String[] completedClasses;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -65,7 +65,7 @@ public class Character {
 	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JsonIgnore
 	private User user;
-	
+
 	@OneToOne(mappedBy = "character", cascade = CascadeType.ALL)
 	private CharacterStats stats;
 
@@ -73,10 +73,9 @@ public class Character {
 	}
 
 	public Character(User user, NewCharacterRequest newCharacterRequest) {
-		this.stats = new CharacterStats(newCharacterRequest);
-		this.stats.setCharacter(this);
-		
-		//mandatory values
+		this.stats = new CharacterStats(newCharacterRequest, this);
+
+		// mandatory values
 		this.user = user;
 		this.name = newCharacterRequest.name();
 		this.race = newCharacterRequest.race();
@@ -84,7 +83,7 @@ public class Character {
 		this.resource = newCharacterRequest.resource();
 		this.power = newCharacterRequest.power();
 		this.currentClass = newCharacterRequest.currentClass();
-		//optional values
+		// optional values
 		newCharacterRequest.age().ifPresent(a -> this.age = a);
 		newCharacterRequest.alignment().ifPresent(al -> this.alignment = al);
 		newCharacterRequest.completedClasses().ifPresent(classes -> this.completedClasses = classes.split(", ?"));
@@ -101,11 +100,11 @@ public class Character {
 	public User getUser() {
 		return user;
 	}
-	
+
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 	public CharacterStats getStats() {
 		return stats;
 	}

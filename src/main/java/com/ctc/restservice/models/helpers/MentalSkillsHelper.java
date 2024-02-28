@@ -2,8 +2,8 @@ package com.ctc.restservice.models.helpers;
 
 import java.util.Optional;
 
-public class MentalSkills {
-	public MentalSkills(Optional<Integer> academicLore, Optional<Integer> arcana, Optional<Integer> commonLore,
+public class MentalSkillsHelper {
+	public MentalSkillsHelper(Optional<Integer> academicLore, Optional<Integer> arcana, Optional<Integer> commonLore,
 			Optional<Integer> crafts, Optional<Integer> forbiddenLore, Optional<Integer> medicae,
 			Optional<Integer> perception, Optional<Integer> politics, Optional<Integer> techUse) {
 		academicLore.ifPresentOrElse(a -> this.academicLore = a, () -> this.academicLore = 0);
