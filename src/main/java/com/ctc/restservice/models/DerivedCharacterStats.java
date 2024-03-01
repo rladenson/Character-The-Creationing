@@ -12,7 +12,7 @@ import jakarta.persistence.Id;
 		+ "	5 + (5*s.composure) as mental_def,"
 		+ "	s.willpower + s.composure as resolve,"
 		+ "	s.strength + s.dexterity as speed,"
-		+ "	1 + CEILING((s.size + s.level) / 2) as resilience,"
+		+ "	(1 + CEILING((s.size + s.level) / 2))::integer as resilience,"
 		+ "	s.dexterity + s.composure as initiative,"
 		+ "	s.character_id as character_id"
 		+ " FROM character_stats s;")
