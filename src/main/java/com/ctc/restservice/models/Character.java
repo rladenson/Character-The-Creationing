@@ -1,5 +1,7 @@
 package com.ctc.restservice.models;
 
+import java.util.UUID;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -16,8 +18,8 @@ import jakarta.validation.constraints.Size;
 public class Character {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private UUID id;
 
 	@NotBlank
 	@Size(max = 20)
@@ -114,12 +116,8 @@ public class Character {
 		return name + " by " + user;
 	}
 
-	public long getId() {
+	public UUID getId() {
 		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
 	}
 
 	public String getAge() {

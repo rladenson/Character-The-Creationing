@@ -1,5 +1,7 @@
 package com.ctc.restservice.models;
 
+import org.hibernate.annotations.Type;
+
 import com.ctc.restservice.controllers.characters.NewCharacterRequest;
 import com.ctc.restservice.models.helpers.Characteristics;
 import com.ctc.restservice.models.helpers.MentalSkillsHelper;
@@ -12,8 +14,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Positive;
 
@@ -68,7 +72,7 @@ public class CharacterStats {
 //	private Integer devotion;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@MapsId
+	@JoinColumn(columnDefinition="uuid", referencedColumnName="id", updatable=false)
 	private Character character;
 
 	@OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)

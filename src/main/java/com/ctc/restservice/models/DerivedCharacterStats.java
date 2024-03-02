@@ -1,5 +1,7 @@
 package com.ctc.restservice.models;
 
+import java.util.UUID;
+
 import org.hibernate.annotations.View;
 
 import jakarta.persistence.Column;
@@ -41,7 +43,7 @@ public class DerivedCharacterStats {
 
 	@Id
 	@Column(name = "character_id")
-	private Long characterId;
+	private UUID characterId;
 
 	public DerivedCharacterStats() {
 
@@ -75,7 +77,7 @@ public class DerivedCharacterStats {
 		return initiative;
 	}
 
-	public Long getCharacterId() {
+	public UUID getCharacterId() {
 		return characterId;
 	}
 }

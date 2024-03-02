@@ -2,6 +2,7 @@ package com.ctc.restservice.controllers.characters;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -46,16 +47,15 @@ public class CharacterController {
 	CharacterStatsRepository statsRepository;
 	@Autowired
 	DerivedCharacterStatsRepository derivedRepository;
-	
 
 	@PostMapping("/new")
 	public ResponseEntity<?> newCharacter(Authentication authentication,
 			@Valid @RequestBody NewCharacterRequest newCharacterRequest) {
 		String userName = authentication.getName();
 		User user = userRepository.findByUsername(userName).get();
-		
+
 		Character character = new Character(user, newCharacterRequest);
-		
+
 		characterRepository.save(character);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(new CharacterResponse(character));
@@ -71,19 +71,20 @@ public class CharacterController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<?> getCharacter(@PathVariable Long id) {
+	public ResponseEntity<?> getCharacter(@PathVariable UUID id) {
 		Optional<Character> characterMaybe = characterRepository.findById(id);
 		if (characterMaybe.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		Character character = characterMaybe.get();
 		DerivedCharacterStats derived = derivedRepository.findByCharacterId(character.getId());
-		
-		return ResponseEntity.ok().body(new FullCharacterResponse(character, derived, character.getUser().getId(), character.getUser().getUsername()));
+
+		return ResponseEntity.ok().body(new FullCharacterResponse(character, derived, character.getUser().getId(),
+				character.getUser().getUsername()));
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteCharacter(Authentication authentication, @PathVariable Long id) {
+	public ResponseEntity<?> deleteCharacter(Authentication authentication, @PathVariable UUID id) {
 		Optional<Character> characterMaybe = characterRepository.findById(id);
 		if (characterMaybe.isEmpty()) {
 			return ResponseEntity.notFound().build();
@@ -101,7 +102,7 @@ public class CharacterController {
 	}
 
 	@PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
-	public ResponseEntity<?> updateCharacter(Authentication authentication, @PathVariable Long id,
+	public ResponseEntity<?> updateCharacter(Authentication authentication, @PathVariable UUID id,
 			@RequestBody JsonPatch patch) {
 		Optional<Character> characterMaybe = characterRepository.findById(id);
 		if (characterMaybe.isEmpty())
@@ -128,9 +129,9 @@ public class CharacterController {
 		JsonNode patched = patch.apply(objectMapper.convertValue(target, JsonNode.class));
 		return objectMapper.treeToValue(patched, Character.class);
 	}
-	
+
 	@PatchMapping(path = "/{id}/stats", consumes = "application/json-patch+json")
-	public ResponseEntity<?> updateCharacterStats(Authentication authentication, @PathVariable Long id,
+	public ResponseEntity<?> updateCharacterStats(Authentication authentication, @PathVariable UUID id,
 			@RequestBody JsonPatch patch) {
 		Optional<Character> characterMaybe = characterRepository.findById(id);
 		if (characterMaybe.isEmpty())
@@ -140,7 +141,7 @@ public class CharacterController {
 		User user = character.getUser();
 		if (!user.getUsername().equals(authentication.getName()))
 			return new ResponseEntity<>("Can only edit your own members", HttpStatus.UNAUTHORIZED);
-		
+
 		CharacterStats stats = character.getStats();
 
 		try {
@@ -148,7 +149,7 @@ public class CharacterController {
 			statsRepository.save(patchedStats);
 			return ResponseEntity.ok(patchedStats);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 
