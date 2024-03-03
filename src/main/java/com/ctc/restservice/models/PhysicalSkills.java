@@ -5,6 +5,7 @@ import com.ctc.restservice.models.helpers.PhysicalSkillsHelper;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +20,7 @@ public class PhysicalSkills {
 
 	}
 
-	public PhysicalSkills(PhysicalSkillsHelper helper, CharacterStats stats) {
+	public PhysicalSkills(PhysicalSkillsHelper helper) {
 		this.acrobatics = helper.getAcrobatics();
 		this.athletics = helper.getAthletics();
 		this.drive = helper.getDrive();
@@ -29,7 +30,6 @@ public class PhysicalSkills {
 		this.ballistics = helper.getBallistics();
 		this.brawl = helper.getBrawl();
 		this.weaponry = helper.getWeaponry();
-		this.stats = stats;
 	}
 
 	@Id
@@ -98,8 +98,4 @@ public class PhysicalSkills {
 	public Integer getWeaponry() {
 		return weaponry;
 	}
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@MapsId
-	private CharacterStats stats;
 }

@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +50,7 @@ public class CharacterController {
 	CharacterStatsRepository statsRepository;
 	@Autowired
 	DerivedCharacterStatsRepository derivedRepository;
+	private static final Logger logger = LoggerFactory.getLogger(CharacterController.class);
 
 	@PostMapping("/new")
 	public ResponseEntity<?> newCharacter(Authentication authentication,
@@ -119,6 +123,7 @@ public class CharacterController {
 			characterRepository.save(patchedCharacter);
 			return ResponseEntity.ok(patchedCharacter);
 		} catch (Exception e) {
+			logger.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}
 	}
@@ -128,35 +133,5 @@ public class CharacterController {
 		ObjectMapper objectMapper = new ObjectMapper();
 		JsonNode patched = patch.apply(objectMapper.convertValue(target, JsonNode.class));
 		return objectMapper.treeToValue(patched, Character.class);
-	}
-
-	@PatchMapping(path = "/{id}/stats", consumes = "application/json-patch+json")
-	public ResponseEntity<?> updateCharacterStats(Authentication authentication, @PathVariable UUID id,
-			@RequestBody JsonPatch patch) {
-		Optional<Character> characterMaybe = characterRepository.findById(id);
-		if (characterMaybe.isEmpty())
-			return ResponseEntity.notFound().build();
-		Character character = characterMaybe.get();
-
-		User user = character.getUser();
-		if (!user.getUsername().equals(authentication.getName()))
-			return new ResponseEntity<>("Can only edit your own members", HttpStatus.UNAUTHORIZED);
-
-		CharacterStats stats = character.getStats();
-
-		try {
-			CharacterStats patchedStats = applyPatchToStats(patch, stats);
-			statsRepository.save(patchedStats);
-			return ResponseEntity.ok(patchedStats);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-
-	private CharacterStats applyPatchToStats(JsonPatch patch, CharacterStats target)
-			throws JsonPatchException, JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		JsonNode patched = patch.apply(objectMapper.convertValue(target, JsonNode.class));
-		return objectMapper.treeToValue(patched, CharacterStats.class);
 	}
 }

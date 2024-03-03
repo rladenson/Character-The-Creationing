@@ -9,15 +9,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-@View(query = "select 10 + 3*s.wisdom + 3*s.dexterity - 2*s.size as static_defense,"
-		+ "	2 * (s.willpower + s.constitution) as max_hp,"
-		+ "	5 + (5*s.composure) as mental_def,"
-		+ "	s.willpower + s.composure as resolve,"
-		+ "	s.strength + s.dexterity as speed,"
-		+ "	(1 + CEILING((s.size + s.level) / 2))::integer as resilience,"
-		+ "	s.dexterity + s.composure as initiative,"
-		+ "	s.character_id as character_id"
-		+ " FROM character_stats s;")
+@View(query = """
+				select 10 + 3*s.wisdom + 3*s.dexterity - 2*s.size as static_defense,
+		2 * (s.willpower + s.constitution) as max_hp,
+		5 + (5*s.composure) as mental_def,
+		s.willpower + s.composure as resolve,
+		s.strength + s.dexterity as speed,
+		(1 + CEILING((s.size + s.level) / 2))::integer as resilience,
+		s.dexterity + s.composure as initiative,
+		c.id as character_id
+		FROM character_stats s inner join characters c on s.id = c.stats_id;
+				""")
 public class DerivedCharacterStats {
 
 	@Column(name = "static_defense")

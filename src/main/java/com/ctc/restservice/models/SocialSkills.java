@@ -5,6 +5,7 @@ import com.ctc.restservice.models.helpers.SocialSkillsHelper;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +20,7 @@ public class SocialSkills {
 
 	}
 
-	public SocialSkills(SocialSkillsHelper helper, CharacterStats stats) {
+	public SocialSkills(SocialSkillsHelper helper) {
 		this.animalKen = helper.getAnimalKen();
 		this.charm = helper.getCharm();
 		this.command = helper.getCommand();
@@ -29,7 +30,6 @@ public class SocialSkills {
 		this.performer = helper.getPerformer();
 		this.persuasion = helper.getPersuasion();
 		this.scrutiny = helper.getScrutiny();
-		this.stats = stats;
 	}
 
 	@Id
@@ -98,8 +98,4 @@ public class SocialSkills {
 	public Integer getScrutiny() {
 		return scrutiny;
 	}
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@MapsId
-	private CharacterStats stats;
 }

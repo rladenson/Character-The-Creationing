@@ -5,6 +5,7 @@ import com.ctc.restservice.models.helpers.MentalSkillsHelper;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +20,7 @@ public class MentalSkills {
 
 	}
 
-	public MentalSkills(MentalSkillsHelper helper, CharacterStats stats) {
+	public MentalSkills(MentalSkillsHelper helper) {
 		this.academicLore = helper.getAcademicLore();
 		this.arcana = helper.getArcana();
 		this.commonLore = helper.getCommonLore();
@@ -29,7 +30,6 @@ public class MentalSkills {
 		this.perception = helper.getPerception();
 		this.politics = helper.getPolitics();
 		this.techUse = helper.getTechUse();
-		this.stats = stats;
 	}
 
 	@Id
@@ -98,8 +98,4 @@ public class MentalSkills {
 	public Integer getTechUse() {
 		return techUse;
 	}
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@MapsId
-	private CharacterStats stats;
 }

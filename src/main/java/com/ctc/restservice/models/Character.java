@@ -68,14 +68,14 @@ public class Character {
 	@JsonIgnore
 	private User user;
 
-	@OneToOne(mappedBy = "character", cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private CharacterStats stats;
 
 	public Character() {
 	}
 
 	public Character(User user, NewCharacterRequest newCharacterRequest) {
-		this.stats = new CharacterStats(newCharacterRequest, this);
+		this.stats = new CharacterStats(newCharacterRequest);
 
 		// mandatory values
 		this.user = user;

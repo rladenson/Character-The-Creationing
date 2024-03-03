@@ -1,7 +1,5 @@
 package com.ctc.restservice.models;
 
-import org.hibernate.annotations.Type;
-
 import com.ctc.restservice.controllers.characters.NewCharacterRequest;
 import com.ctc.restservice.models.helpers.Characteristics;
 import com.ctc.restservice.models.helpers.MentalSkillsHelper;
@@ -11,13 +9,12 @@ import com.ctc.restservice.models.helpers.SocialSkillsHelper;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Positive;
 
@@ -71,31 +68,27 @@ public class CharacterStats {
 //	@Column(name = "devotion")
 //	private Integer devotion;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(columnDefinition="uuid", referencedColumnName="id", updatable=false)
-	private Character character;
-
-	@OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private MentalSkills mentalSkills;
 
-	@OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private PhysicalSkills physicalSkills;
 
-	@OneToOne(mappedBy = "stats", cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private SocialSkills socialSkills;
 
 	public CharacterStats() {
 
 	}
 
-	public CharacterStats(NewCharacterRequest req, Character character) {
+	public CharacterStats(NewCharacterRequest req) {
 		MentalSkillsHelper mental = req.mentalSkills();
 		PhysicalSkillsHelper physical = req.physicalSkills();
 		SocialSkillsHelper social = req.socialSkills();
 
-		this.mentalSkills = new MentalSkills(mental, this);
-		this.physicalSkills = new PhysicalSkills(physical, this);
-		this.socialSkills = new SocialSkills(social, this);
+		this.mentalSkills = new MentalSkills(mental);
+		this.physicalSkills = new PhysicalSkills(physical);
+		this.socialSkills = new SocialSkills(social);
 
 		Characteristics chars = req.characterisitics();
 
@@ -113,8 +106,6 @@ public class CharacterStats {
 
 		req.xp().ifPresent(exp -> this.xp = exp);
 		req.level().ifPresent(lvl -> this.level = lvl);
-
-		this.character = character;
 	}
 
 	@Override
