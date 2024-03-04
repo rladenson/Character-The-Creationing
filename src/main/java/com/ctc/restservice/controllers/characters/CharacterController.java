@@ -21,9 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ctc.restservice.controllers.MessageResponse;
 import com.ctc.restservice.models.Character;
-import com.ctc.restservice.models.CharacterStats;
 import com.ctc.restservice.models.DerivedCharacterStats;
 import com.ctc.restservice.models.User;
 import com.ctc.restservice.repository.CharacterRepository;
