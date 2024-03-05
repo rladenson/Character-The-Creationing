@@ -1,5 +1,8 @@
 package com.ctc.restservice.models;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.hibernate.annotations.OnDelete;
@@ -60,7 +63,7 @@ public class Character {
 	private String currentClass;
 
 	@Column(name = "completed_classes")
-	private String[] completedClasses;
+	private List<String> completedClasses;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -79,16 +82,22 @@ public class Character {
 
 		// mandatory values
 		this.user = user;
-		this.name = newCharacterRequest.name();
-		this.race = newCharacterRequest.race();
-		this.exaltation = newCharacterRequest.exaltation();
-		this.resource = newCharacterRequest.resource();
-		this.power = newCharacterRequest.power();
-		this.currentClass = newCharacterRequest.currentClass();
+		this.name = newCharacterRequest.name().trim();
+		this.race = newCharacterRequest.race().trim();
+		this.exaltation = newCharacterRequest.exaltation().trim();
+		this.resource = newCharacterRequest.resource().trim();
+		this.power = newCharacterRequest.power().trim();
+		this.currentClass = newCharacterRequest.currentClass().trim();
 		// optional values
 		newCharacterRequest.age().ifPresent(a -> this.age = a);
 		newCharacterRequest.alignment().ifPresent(al -> this.alignment = al);
-		newCharacterRequest.completedClasses().ifPresent(classes -> this.completedClasses = classes.split(", ?"));
+		newCharacterRequest.completedClasses().ifPresentOrElse(classes -> {
+			if(classes.trim().equals("")) {
+				this.completedClasses = new ArrayList<String>();
+			} else {
+				this.completedClasses = Arrays.asList(classes.split(", ?"));
+			}
+		}, () -> this.completedClasses = new ArrayList<String>());
 	}
 
 	public String getName() {
@@ -176,7 +185,8 @@ public class Character {
 		this.power = power;
 	}
 
-	public String[] getCompletedClasses() {
+	public List<String> getCompletedClasses() {
+		System.out.println(completedClasses);
 		return completedClasses;
 	}
 
